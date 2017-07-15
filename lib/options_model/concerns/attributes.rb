@@ -51,7 +51,8 @@ module OptionsModel
           end
 
           self.attribute_names_for_inlining << name
-          name
+
+          self
         end
 
         def enum_attribute(name, enum, default: nil, allow_nil: false)
@@ -74,6 +75,8 @@ module OptionsModel
 
             validates name, inclusion: {in: enum}, allow_nil: allow_nil
           end
+
+          self
         end
 
         def embeds_one(name, class_name: nil, anonymous_class: nil)
@@ -117,7 +120,8 @@ module OptionsModel
           end
 
           self.attribute_names_for_nesting << name
-          name
+
+          self
         end
 
         def attribute_defaults

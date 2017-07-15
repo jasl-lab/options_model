@@ -14,6 +14,18 @@ module OptionsModel
       end
     end
 
+    def ==(other)
+      other.instance_of?(self.class) &&
+        attributes == other.attributes &&
+        nested_attributes == other.nested_attributes &&
+        unused_attributes == other.unused_attributes
+    end
+    alias :eql? :==
+
+    def hash
+      [attributes, nested_attributes, unused_attributes].hash
+    end
+
     def inspect
       "#<#{self.class.name}:OptionsModel #{self.to_h}>"
     end

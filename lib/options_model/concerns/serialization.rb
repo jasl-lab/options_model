@@ -6,20 +6,11 @@ module OptionsModel
       def to_h
         hash = {}
 
-        self.class.attribute_names.each do |attribute_name|
-          attribute = public_send(attribute_name)
-          if attribute.is_a?(OptionsModel::Base)
-            hash[attribute_name] = attribute.to_h
-          else
-            hash[attribute_name] = attribute
-          end
-        end
+        hash.merge! unused_attributes if self.class.with_unused_attributes?
+        hash.merge! attributes
+        hash.merge! nested_attributes.reduce({}) { |h, (k, v)| h[k] = v.to_h; h }
 
         hash
-      end
-
-      def to_h_with_unused
-        to_h.merge unused_attributes
       end
 
       module ClassMethods
@@ -46,6 +37,14 @@ module OptionsModel
           end
 
           new hash
+        end
+
+        def with_unused_attributes!
+          @with_unused_attributes = true
+        end
+
+        def with_unused_attributes?
+          @with_unused_attributes
         end
       end
     end

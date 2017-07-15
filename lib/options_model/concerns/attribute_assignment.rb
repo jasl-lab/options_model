@@ -57,23 +57,17 @@ module OptionsModel
         end
       end
 
-      def _attributes
+      def attributes
         @attributes ||= ActiveSupport::HashWithIndifferentAccess.new
       end
-      private :_attributes
-      alias_method :attributes, :_attributes
 
-      def _nested_attributes
+      def nested_attributes
         @nested_attributes ||= ActiveSupport::HashWithIndifferentAccess.new
       end
-      private :_nested_attributes
-      alias_method :nested_attributes, :_nested_attributes
 
-      def _unused_attributes
+      def unused_attributes
         @unused_attributes ||= ActiveSupport::HashWithIndifferentAccess.new
       end
-      private :_unused_attributes
-      alias_method :unused_attributes, :_unused_attributes
     end
   end
 end
