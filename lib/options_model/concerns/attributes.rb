@@ -13,13 +13,22 @@ module OptionsModel
           ActiveModel::Type.lookup(cast_type)
 
           attribute_defaults[name] = default
+          default_extractor =
+            case
+            when default.respond_to?(:call)
+              ".call"
+            when default.duplicable?
+              ".deep_dup"
+            else
+              ""
+            end
 
           generated_attribute_methods.synchronize do
             generated_attribute_methods.module_eval <<-STR, __FILE__, __LINE__ + 1
             def #{name}
               value = attributes[:#{name}]
               return value unless value.nil?
-              attributes[:#{name}] = self.class.attribute_defaults[:#{name}].#{default.respond_to?(:call) ? "call" : "dup"}
+              attributes[:#{name}] = self.class.attribute_defaults[:#{name}]#{default_extractor}}
               attributes[:#{name}]
             end
             STR
@@ -30,7 +39,7 @@ module OptionsModel
                 if value.respond_to?(:to_a)
                   attributes[:#{name}] = value.to_a.map { |i| ActiveModel::Type.lookup(:#{cast_type}).cast(i) }
                 elsif value.nil?
-                  attributes[:#{name}] = self.class.attribute_defaults[:#{name}].#{default.respond_to?(:call) ? "call" : "dup"}
+                  attributes[:#{name}] = self.class.attribute_defaults[:#{name}]#{default_extractor}
                 else
                   raise ArgumentError,
                         "`value` should respond to `to_a`, but got \#{value.class} -- \#{value.inspect}"
