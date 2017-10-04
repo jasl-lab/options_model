@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "active_model"
 require "active_model/type"
 
@@ -9,5 +11,4 @@ require "options_model/concerns/serialization"
 require "options_model/base"
 
 module OptionsModel
-
 end

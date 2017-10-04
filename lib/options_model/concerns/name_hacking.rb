@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module OptionsModel
   module Concerns
     module NameHacking

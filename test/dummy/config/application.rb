@@ -1,4 +1,6 @@
-require_relative 'boot'
+# frozen_string_literal: true
+
+require_relative "boot"
 
 # Pick the frameworks you want:
 # require "active_record/railtie"
@@ -23,4 +25,3 @@ module Dummy
     # -- all .rb files in that directory are automatically loaded.
   end
 end
-

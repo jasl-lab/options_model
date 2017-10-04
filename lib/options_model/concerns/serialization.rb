@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module OptionsModel
   module Concerns
     module Serialization
@@ -8,9 +10,11 @@ module OptionsModel
 
         hash.merge! unused_attributes if self.class.with_unused_attributes?
         self.class.attribute_names_for_inlining.each do |name|
-          hash[name] = send(:"#{name}")
+          hash[name] = send(name)
         end
-        hash.merge! nested_attributes.reduce({}) { |h, (k, v)| h[k] = v.to_h; h }
+        self.class.attribute_names_for_nesting.each do |name|
+          hash[name] = send(name).to_h
+        end
 
         hash
       end

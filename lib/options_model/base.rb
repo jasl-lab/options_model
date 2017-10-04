@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module OptionsModel
   class Base
     include ActiveModel::Model
