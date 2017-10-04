@@ -28,7 +28,7 @@ module OptionsModel
             def #{name}
               value = attributes[:#{name}]
               return value unless value.nil?
-              attributes[:#{name}] = self.class.attribute_defaults[:#{name}]#{default_extractor}}
+              attributes[:#{name}] = self.class.attribute_defaults[:#{name}]#{default_extractor}
               attributes[:#{name}]
             end
             STR

@@ -7,7 +7,9 @@ module OptionsModel
         hash = {}
 
         hash.merge! unused_attributes if self.class.with_unused_attributes?
-        hash.merge! attributes
+        self.class.attribute_names_for_inlining.each do |name|
+          hash[name] = send(:"#{name}")
+        end
         hash.merge! nested_attributes.reduce({}) { |h, (k, v)| h[k] = v.to_h; h }
 
         hash
