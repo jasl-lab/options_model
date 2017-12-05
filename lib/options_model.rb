@@ -10,5 +10,9 @@ require "options_model/concerns/serialization"
 
 require "options_model/base"
 
+unless defined?(ActiveModel::Type)
+  require "active_model/type"
+end
+
 module OptionsModel
 end

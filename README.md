@@ -11,24 +11,25 @@ support attribute:
 
 ## Usage
 
+```ruby
 class Person < OptionsModel::Base
-  attribute :name, :string
-  attribute :age, :integer
+ attribute :name, :string
+ attribute :age, :integer
 
-  validates :name, presence: true
+ validates :name, presence: true
 end
 
 class Book < OptionsModel::Base
-  embeds_one :author, class_name: 'Person'
+ embeds_one :author, class_name: 'Person'
 
-  attribute :title,     :string
-  attribute :tags,      :string,   array:   true
-  attribute :price,     :decimal,  default: 0
-  attribute :meta,      :json,     default: {}
-  attribute :bought_at, :datetime, default: -> { Time.new } 
+ attribute :title,     :string
+ attribute :tags,      :string,   array:   true
+ attribute :price,     :decimal,  default: 0
+ attribute :bought_at, :datetime, default: -> { Time.new } 
 
-  validates :title, presence: true
+ validates :title, presence: true
 end
+```
 
 ## Installation
 Add this line to your application's Gemfile:

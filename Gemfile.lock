@@ -2,8 +2,8 @@ PATH
   remote: .
   specs:
     options_model (0.0.6)
-      activemodel (~> 5.0)
-      activesupport (~> 5.0)
+      activemodel (>= 4.2, < 6.0)
+      activesupport (>= 4.2, < 6.0)
 
 GEM
   remote: https://rubygems.org/
@@ -117,4 +117,4 @@ DEPENDENCIES
   rails (~> 5.0)
 
 BUNDLED WITH
-   1.15.4
+   1.16.0
