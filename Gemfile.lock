@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    options_model (0.0.6)
+    options_model (0.0.7)
       activemodel (>= 4.2, < 6.0)
       activesupport (>= 4.2, < 6.0)
 
