@@ -11,10 +11,6 @@ module OptionsModel
         end
 
         def name=(value)
-          unless /^[A-Z][a-zA-Z_0-9]*$/ =~ value
-            raise ArgumentError, "`name` must a valid class name"
-          end
-
           @_name = value
         end
       end
