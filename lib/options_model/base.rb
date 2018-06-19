@@ -40,7 +40,7 @@ module OptionsModel
       true
     end
 
-    def self.derive(name)
+    def self.derive(name = "AnonymousRecord")
       Class.new(self) do
         include OptionsModel::Concerns::NameHacking
         self.name = name
