@@ -9,9 +9,5 @@ require "options_model/concerns/serialization"
 
 require "options_model/base"
 
-if ActiveModel.gem_version < Gem::Version.new("5.0.0")
-  require "active_model/type"
-end
-
 module OptionsModel
 end
