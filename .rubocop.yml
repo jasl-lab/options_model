@@ -1,9 +1,18 @@
+require: rubocop-performance
+
 inherit_gem:
-  rubocop-rails:
+  rubocop-rails_config:
     - config/rails.yml
 
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.5
+  Exclude:
+    - bin/**/*
+    - test/dummy/bin/**/*
+    - test/dummy/db/schema.rb
+
+Metrics/LineLength:
+  Max: 150
 
 # frozen_string_literal: true
 Style/FrozenStringLiteralComment:
@@ -117,10 +126,43 @@ Style/UnneededPercentQ:
 
 # Align `end` with the matching keyword or starting expression except for
 # assignments, where it should be aligned with the LHS.
-Lint/EndAlignment:
+Layout/EndAlignment:
   Enabled: true
   EnforcedStyleAlignWith: variable
 
 # Use my_method(my_arg) not my_method( my_arg ) or my_method my_arg.
 Lint/RequireParentheses:
   Enabled: true
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Lint/HandleExceptions:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Layout/EmptyLinesAroundArguments:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Naming/UncommunicativeMethodParamName:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false

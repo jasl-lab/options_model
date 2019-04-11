@@ -161,7 +161,7 @@ module OptionsModel
 
         def finalize!(nested = true)
           if nested
-            nested_classes.values.each &:finalize!
+            nested_classes.values.each(&:finalize!)
           end
 
           @finalized = true
