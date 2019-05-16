@@ -16,10 +16,9 @@ module OptionsModel
 
           attribute_defaults[name] = default
           default_extractor =
-            case
-            when default.respond_to?(:call)
+            if default.respond_to?(:call)
               ".call"
-            when default.duplicable?
+            elsif default.duplicable?
               ".deep_dup"
             else
               ""
@@ -55,13 +54,11 @@ module OptionsModel
               end
               STR
 
-              if cast_type == :boolean
-                generated_attribute_methods.send :alias_method, :"#{name}?", name
-              end
+              generated_attribute_methods.send :alias_method, :"#{name}?", name if cast_type == :boolean
             end
           end
 
-          self.attribute_names_for_inlining << name
+          attribute_names_for_inlining << name
 
           self
         end
@@ -69,9 +66,8 @@ module OptionsModel
         def enum_attribute(name, enum, default: nil, allow_nil: false)
           check_not_finalized!
 
-          unless enum.is_a?(Array) && enum.any?
-            raise ArgumentError, "enum should be an Array and can't empty"
-          end
+          raise ArgumentError, "enum should be an Array and can't empty" unless enum.is_a?(Array) && enum.any?
+
           enum = enum.map(&:to_s)
 
           attribute name, :string, default: default
@@ -80,11 +76,11 @@ module OptionsModel
           generated_class_methods.synchronize do
             generated_class_methods.module_eval <<-STR, __FILE__, __LINE__ + 1
             def #{pluralized_name}
-              %w(#{enum.join(" ")}).freeze
+              %w(#{enum.join(' ')}).freeze
             end
             STR
 
-            validates name, inclusion: {in: enum}, allow_nil: allow_nil
+            validates name, inclusion: { in: enum }, allow_nil: allow_nil
           end
 
           self
@@ -93,17 +89,15 @@ module OptionsModel
         def embeds_one(name, class_name: nil, anonymous_class: nil)
           check_not_finalized!
 
-          if class_name.blank? && anonymous_class.nil?
-            raise ArgumentError, "must provide at least one of `class_name` or `anonymous_class`"
-          end
+          raise ArgumentError, "must provide at least one of `class_name` or `anonymous_class`" if class_name.blank? && anonymous_class.nil?
 
           name = name.to_sym
           check_name_validity! name
 
-          if class_name.present?
-            nested_classes[name] = class_name.constantize
+          nested_classes[name] = if class_name.present?
+            class_name.constantize
           else
-            nested_classes[name] = anonymous_class
+            anonymous_class
           end
 
           generated_attribute_methods.synchronize do
@@ -130,7 +124,7 @@ module OptionsModel
             STR
           end
 
-          self.attribute_names_for_nesting << name
+          attribute_names_for_nesting << name
 
           self
         end
@@ -160,60 +154,56 @@ module OptionsModel
         end
 
         def finalize!(nested = true)
-          if nested
-            nested_classes.values.each(&:finalize!)
-          end
+          nested_classes.values.each(&:finalize!) if nested
 
           @finalized = true
         end
 
         protected
 
-        def check_name_validity!(symbolized_name)
-          if dangerous_attribute_method?(symbolized_name)
-            raise ArgumentError, "#{symbolized_name} is defined by #{OptionsModel::Base}. Check to make sure that you don't have an attribute or method with the same name."
-          end
-
-          if attribute_names_for_inlining.include?(symbolized_name) || attribute_names_for_nesting.include?(symbolized_name)
-            raise ArgumentError, "duplicate define attribute `#{symbolized_name}`"
-          end
-        end
-
-        def check_not_finalized!
-          if finalized?
-            raise "can't modify finalized #{self}"
-          end
-        end
-
-        # A method name is 'dangerous' if it is already (re)defined by OptionsModel, but
-        # not by any ancestors. (So 'puts' is not dangerous but 'save' is.)
-        def dangerous_attribute_method?(name) # :nodoc:
-          method_defined_within?(name, OptionsModel::Base)
-        end
-
-        def method_defined_within?(name, klass, superklass = klass.superclass) # :nodoc:
-          if klass.method_defined?(name) || klass.private_method_defined?(name)
-            if superklass.method_defined?(name) || superklass.private_method_defined?(name)
-              klass.instance_method(name).owner != superklass.instance_method(name).owner
-            else
-              true
+          def check_name_validity!(symbolized_name)
+            if dangerous_attribute_method?(symbolized_name)
+              raise ArgumentError, "#{symbolized_name} is defined by #{OptionsModel::Base}. Check to make sure that you don't have an attribute or method with the same name."
             end
-          else
-            false
+
+            if attribute_names_for_inlining.include?(symbolized_name) || attribute_names_for_nesting.include?(symbolized_name)
+              raise ArgumentError, "duplicate define attribute `#{symbolized_name}`"
+            end
           end
-        end
 
-        def generated_attribute_methods
-          @generated_attribute_methods ||= Module.new {
-            extend Mutex_m
-          }.tap { |mod| include mod }
-        end
+          def check_not_finalized!
+            raise "can't modify finalized #{self}" if finalized?
+          end
 
-        def generated_class_methods
-          @generated_class_methods ||= Module.new {
-            extend Mutex_m
-          }.tap { |mod| extend mod }
-        end
+          # A method name is 'dangerous' if it is already (re)defined by OptionsModel, but
+          # not by any ancestors. (So 'puts' is not dangerous but 'save' is.)
+          def dangerous_attribute_method?(name) # :nodoc:
+            method_defined_within?(name, OptionsModel::Base)
+          end
+
+          def method_defined_within?(name, klass, superklass = klass.superclass) # :nodoc:
+            if klass.method_defined?(name) || klass.private_method_defined?(name)
+              if superklass.method_defined?(name) || superklass.private_method_defined?(name)
+                klass.instance_method(name).owner != superklass.instance_method(name).owner
+              else
+                true
+              end
+            else
+              false
+            end
+          end
+
+          def generated_attribute_methods
+            @generated_attribute_methods ||= Module.new do
+              extend Mutex_m
+            end.tap { |mod| include mod }
+          end
+
+          def generated_class_methods
+            @generated_class_methods ||= Module.new do
+              extend Mutex_m
+            end.tap { |mod| extend mod }
+          end
       end
     end
   end

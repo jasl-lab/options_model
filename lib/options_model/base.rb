@@ -10,9 +10,7 @@ module OptionsModel
     validate do
       self.class.attribute_names.each do |attribute_name|
         attribute = public_send(attribute_name)
-        if attribute.is_a?(self.class) && attribute.invalid?
-          errors.add attribute_name, :invalid
-        end
+        errors.add attribute_name, :invalid if attribute.is_a?(self.class) && attribute.invalid?
       end
     end
 
@@ -22,14 +20,14 @@ module OptionsModel
         nested_attributes == other.nested_attributes &&
         unused_attributes == other.unused_attributes
     end
-    alias :eql? :==
+    alias eql? ==
 
     def hash
       [attributes, nested_attributes, unused_attributes].hash
     end
 
     def inspect
-      "#<#{self.class.name}:OptionsModel #{self.to_h}>"
+      "#<#{self.class.name}:OptionsModel #{to_h}>"
     end
 
     def self.inspect

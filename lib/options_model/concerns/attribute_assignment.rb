@@ -18,9 +18,7 @@ module OptionsModel
       def update(other)
         return unless other
 
-        unless other.respond_to?(:to_h)
-          raise ArgumentError, "#{other} must be respond to `to_h`"
-        end
+        raise ArgumentError, "#{other} must be respond to `to_h`" unless other.respond_to?(:to_h)
 
         other.to_h.each do |k, v|
           if respond_to?("#{k}=")
@@ -47,9 +45,7 @@ module OptionsModel
       end
 
       def fetch(key, default = nil)
-        if self.class.attribute_names.exclude?(key.to_sym) && default.nil? && !block_given?
-          raise KeyError, "attribute not found"
-        end
+        raise KeyError, "attribute not found" if self.class.attribute_names.exclude?(key.to_sym) && default.nil? && !block_given?
 
         value = respond_to?(key) ? public_send(key) : nil
         return value if value

@@ -35,7 +35,7 @@ module OptionsModel
           return new unless yaml
           return new unless yaml.is_a?(String) && /^---/.match?(yaml)
 
-          hash = YAML.load(yaml) || Hash.new
+          hash = YAML.safe_load(yaml) || {}
 
           unless hash.is_a? Hash
             raise ArgumentError,
