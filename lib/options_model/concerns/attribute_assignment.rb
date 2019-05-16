@@ -15,7 +15,7 @@ module OptionsModel
         update_attributes(other)
       end
 
-      def update_attributes(other)
+      def update(other)
         return unless other
 
         unless other.respond_to?(:to_h)
@@ -30,6 +30,8 @@ module OptionsModel
           end
         end
       end
+
+      alias update_attributes update
 
       def [](key)
         public_send(key) if respond_to?(key)
