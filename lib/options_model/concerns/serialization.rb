@@ -35,7 +35,7 @@ module OptionsModel
           return new unless yaml
           return new unless yaml.is_a?(String) && /^---/.match?(yaml)
 
-          hash = YAML.safe_load(yaml) || {}
+          hash = YAML.safe_load(yaml, permitted_classes: permitted_attribute_classes) || {}
 
           unless hash.is_a? Hash
             raise ArgumentError,
@@ -51,6 +51,10 @@ module OptionsModel
 
         def with_unused_attributes?
           @with_unused_attributes
+        end
+
+        def permitted_attribute_classes
+          @permitted_attribute_classes ||= []
         end
       end
     end
