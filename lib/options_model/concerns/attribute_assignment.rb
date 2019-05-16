@@ -15,7 +15,7 @@ module OptionsModel
         update_attributes(other)
       end
 
-      def update(other)
+      def replace(other)
         return unless other
 
         raise ArgumentError, "#{other} must be respond to `to_h`" unless other.respond_to?(:to_h)
@@ -29,7 +29,7 @@ module OptionsModel
         end
       end
 
-      alias update_attributes update
+      alias update_attributes replace
 
       def [](key)
         public_send(key) if respond_to?(key)
