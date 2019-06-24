@@ -54,7 +54,7 @@ module OptionsModel
         end
 
         def permitted_attribute_classes
-          @permitted_attribute_classes ||= []
+          @permitted_attribute_classes ||= [Symbol]
         end
       end
     end
