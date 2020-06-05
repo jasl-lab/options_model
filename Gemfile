@@ -15,17 +15,14 @@ gemspec
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 
-gem "rails", "~> 6.0.0.beta3"
+gem "rails", "~> 6.0"
 
 # Use Puma as the app server
 gem "puma"
-# For better console experience
-gem "pry-rails"
 # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
 gem "listen", ">= 3.0.5", "< 3.2"
 gem "web-console", group: :development
-# Call "byebug" anywhere in the code to stop execution and get a debugger console
-gem "pry-byebug"
 
 gem "rubocop"
+gem "rubocop-rails"
 gem "rubocop-performance"
