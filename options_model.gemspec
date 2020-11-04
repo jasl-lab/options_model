@@ -23,4 +23,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency "activemodel", ">= 5", "< 7"
   s.add_dependency "activesupport", ">= 5", "< 7"
+  s.add_dependency "psych", "~> 3.2"
 end
