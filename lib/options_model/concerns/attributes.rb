@@ -24,18 +24,17 @@ module OptionsModel
               ""
             end
 
-          generated_attribute_methods.synchronize do
-            generated_attribute_methods.module_eval <<-STR, __FILE__, __LINE__ + 1
+          generated_attribute_methods.module_eval <<-STR, __FILE__, __LINE__ + 1
             def #{name}
               value = attributes[:#{name}]
               return value unless value.nil?
               attributes[:#{name}] = self.class.attribute_defaults[:#{name}]#{default_extractor}
               attributes[:#{name}]
             end
-            STR
+          STR
 
-            if array
-              generated_attribute_methods.module_eval <<-STR, __FILE__, __LINE__ + 1
+          if array
+            generated_attribute_methods.module_eval <<-STR, __FILE__, __LINE__ + 1
               def #{name}=(value)
                 if value.respond_to?(:to_a)
                   attributes[:#{name}] = value.to_a.map { |i| ActiveModel::Type.lookup(:#{cast_type}).cast(i) }
@@ -46,16 +45,15 @@ module OptionsModel
                         "`value` should respond to `to_a`, but got \#{value.class} -- \#{value.inspect}"
                 end
               end
-              STR
-            else
-              generated_attribute_methods.module_eval <<-STR, __FILE__, __LINE__ + 1
+            STR
+          else
+            generated_attribute_methods.module_eval <<-STR, __FILE__, __LINE__ + 1
               def #{name}=(value)
                 attributes[:#{name}] = ActiveModel::Type.lookup(:#{cast_type}).cast(value)
               end
-              STR
+            STR
 
-              generated_attribute_methods.send :alias_method, :"#{name}?", name if cast_type == :boolean
-            end
+            generated_attribute_methods.send :alias_method, :"#{name}?", name if cast_type == :boolean
           end
 
           attribute_names_for_inlining << name
@@ -100,14 +98,13 @@ module OptionsModel
             anonymous_class
           end
 
-          generated_attribute_methods.synchronize do
-            generated_attribute_methods.module_eval <<-STR, __FILE__, __LINE__ + 1
+          generated_attribute_methods.module_eval <<-STR, __FILE__, __LINE__ + 1
             def #{name}
               nested_attributes[:#{name}] ||= self.class.nested_classes[:#{name}].new(attributes[:#{name}])
             end
-            STR
+          STR
 
-            generated_attribute_methods.module_eval <<-STR, __FILE__, __LINE__ + 1
+          generated_attribute_methods.module_eval <<-STR, __FILE__, __LINE__ + 1
             def #{name}=(value)
               klass = self.class.nested_classes[:#{name}]
               if value.respond_to?(:to_h)
@@ -121,8 +118,7 @@ module OptionsModel
                       "`value` should respond to `to_h` or \#{klass}, but got \#{value.class}"
               end
             end
-            STR
-          end
+          STR
 
           attribute_names_for_nesting << name
 
@@ -194,15 +190,11 @@ module OptionsModel
           end
 
           def generated_attribute_methods
-            @generated_attribute_methods ||= Module.new do
-              extend Mutex_m
-            end.tap { |mod| include mod }
+            @generated_attribute_methods ||= Module.new.tap { |mod| include mod }
           end
 
           def generated_class_methods
-            @generated_class_methods ||= Module.new do
-              extend Mutex_m
-            end.tap { |mod| extend mod }
+            @generated_class_methods ||= Module.new.tap { |mod| include mod }
           end
       end
     end
